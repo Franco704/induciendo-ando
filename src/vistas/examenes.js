@@ -35,7 +35,7 @@ const aviso = (e) => e.regional && h('aside', { class: 'nota' }, h('p', {}, h('s
 const lista = (examenes) => h('ul', { class: 'lista-finales' }, examenes.map((e) =>
   h('li', {}, h('a', { class: 'lista-finales__item', href: `#/examen/${e.id}` },
     h('span', { class: 'lista-finales__fecha' }, e.tipo === 'final' ? e.fecha : e.nombre),
-    h('span', { class: 'lista-finales__temas' }, temas(e) + (e.regional ? ` · regional ${e.regional}` : '')))))));
+    h('span', { class: 'lista-finales__temas' }, temas(e) + (e.regional ? ` · regional ${e.regional}` : ''))))));
 
 const temas = (e) => {
   const tps = [...new Set(e.items.map((i) => moduloPorId(i.tema)?.tp))].sort((a, b) => a - b);

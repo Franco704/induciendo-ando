@@ -71,3 +71,11 @@ test('el simulacro de final tiene teoría y aplicación en los tres bloques', as
     assert.ok(items.some((i) => bloqueDe(i.tema) === b.id && i.tipo === 'practica'), `${b.id} sin práctica`);
   }
 });
+
+// Las vistas importan KaTeX desde la CDN y no se cargan en Node: al menos que todo src/ parsee.
+test('todo src/ es JavaScript válido', async () => {
+  const { readdirSync } = await import('node:fs');
+  const { execFileSync } = await import('node:child_process');
+  const archivos = readdirSync('src', { recursive: true }).filter((f) => f.endsWith('.js'));
+  for (const f of archivos) execFileSync(process.execPath, ['--check', `src/${f}`]);
+});
