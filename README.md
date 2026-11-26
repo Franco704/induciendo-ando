@@ -6,7 +6,7 @@ Guía de estudio de **Física II (UTN-FRT, 2.º año)**, armada con las clases y
 - **Segundo parcial (electromagnetismo, ondas y calor):** TP 11 a 19. Faraday y Lenz, inductancia, circuitos RL, LC y RLC, corriente alterna, transformador y magnetismo en la materia, Maxwell y ondas electromagnéticas, polarización, interferencia y difracción, temperatura y gases, calor y primer principio.
 - **24 simuladores interactivos:** fuerzas de Coulomb, líneas de campo que se arrastran, una carga entre placas, E(r) por la ley de Gauss, equipotenciales y trabajo, capacitor con dieléctrico (conectado o desconectado), electrones a la deriva, circuito de dos mallas resuelto por nodos, carga y descarga RC, órbitas y selector de velocidades, campo de corrientes rectas, barra sobre rieles (Faraday-Lenz), transitorio RL, oscilaciones LC y RLC, fasores y resonancia, transformador y transmisión, onda electromagnética, polarizadores en cadena, rendijas (interferencia y difracción), dilatación y anomalía del agua, gas ideal, calorímetro con agua y hielo, procesos en el diagrama p–V y conducción a través de una pared.
 - **13 videos animados** (sin sonido, con subtítulos), generados por código.
-- **47 exámenes resueltos:** 17 finales (2010 a noviembre de 2026) y 30 parciales, recuperatorios y pre-parciales (2018 a 2026), con 195 ítems resueltos paso a paso y enlazados a su TP.
+- **48 exámenes resueltos:** 17 finales de la FRT (2010 a noviembre de 2026), un modelo de final de opción múltiple de la regional Buenos Aires (UTN-FRBA, marcado como tal) y 30 parciales, recuperatorios y pre-parciales (2018 a 2026), con 210 ítems resueltos paso a paso y enlazados a su TP.
 - **Modo final:** ranking de los temas más tomados y simulacro con el formato actual (tres bloques, electricidad, termodinámica y electromagnetismo, cada uno con un tema de teoría y una aplicación).
 - Teoría por TP, 113 ejercicios resueltos de los TP y de los exámenes (los pasos se revelan de a uno), 136 preguntas de autoevaluación más las de opción múltiple de los exámenes, simulacro por parcial, repaso de las falladas y hoja de fórmulas.
 
@@ -65,9 +65,11 @@ npm test
 
 ### 3.er año
 
+- [Consultando Ando](https://franco704.github.io/consultando-ando/): Gestión de Datos ([repositorio](https://github.com/Franco704/consultando-ando))
 - [Backeando Ando](https://franco704.github.io/backeando-ando/): Desarrollo de Software, backend ([repositorio](https://github.com/Franco704/backeando-ando))
 - [Fronteando Ando](https://franco704.github.io/fronteando-ando/): Desarrollo de Software, frontend ([repositorio](https://github.com/Franco704/fronteando-ando))
 - [Diseñando Ando](https://franco704.github.io/disenando-ando/): Diseño de Sistemas de Información ([repositorio](https://github.com/Franco704/disenando-ando))
 - [Iterando Ando](https://franco704.github.io/iterando-ando/): Matemática Superior ([repositorio](https://github.com/Franco704/iterando-ando))
 - [Modulando Ando](https://franco704.github.io/modulando-ando/): Comunicación de Datos ([repositorio](https://github.com/Franco704/modulando-ando))
 - [Probando Ando](https://franco704.github.io/probando-ando/): Probabilidad y Estadística ([repositorio](https://github.com/Franco704/probando-ando))
+- [Economizar](https://franco704.github.io/economizar/): Economía ([repositorio](https://github.com/Franco704/economizar))

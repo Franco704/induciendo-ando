@@ -30,7 +30,7 @@ export function vistaSimulacro(raiz, { n }, { almacen }) {
   const mods = falladas ? MODULOS : modulosDe(+n);
   Promise.all(mods.map((m) => cargarModulo(m.id))).then((cargados) => {
     const deExamenes = EXAMENES.flatMap((e) => e.items.filter((i) => i.tipo === 'opcion').map((i) => ({ ...i, examen: e })))
-      .map((i) => ({ id: `${i.examen.id}-${i.n}`, p: i.enunciado, opciones: i.opciones, ok: i.ok, por: i.resolucion, modulo: MODULOS.find((m) => m.id === i.tema) }))
+      .map((i) => ({ id: `${i.examen.id}-${i.n}`, p: i.enunciado, opciones: i.opciones, ok: i.ok, por: i.resolucion, regional: i.examen.regional, modulo: MODULOS.find((m) => m.id === i.tema) }))
       .filter((q) => mods.includes(q.modulo));
     banco = [...cargados.flatMap((m) => (m.preguntas || []).map((q) => ({ ...q, modulo: m }))), ...deExamenes];
     armar();
@@ -44,7 +44,7 @@ export function vistaSimulacro(raiz, { n }, { almacen }) {
     const contar = () => marcador.replaceChildren(h('strong', {}, `${bien}/${hechas}`), h('span', {}, `de ${tanda.length} preguntas`));
     contar();
     lista.replaceChildren(...(tanda.length ? tanda.map((q) => h('div', { class: 'simulacro__item' },
-      h('a', { class: 'simulacro__origen', href: `#/modulo/${q.modulo.id}?s=teoria` }, `TP ${q.modulo.tp}: ${q.modulo.titulo}`),
+      h('a', { class: 'simulacro__origen', href: `#/modulo/${q.modulo.id}?s=teoria` }, `TP ${q.modulo.tp}: ${q.modulo.titulo}${q.regional ? ` · final de la regional ${q.regional}` : ''}`),
       pregunta(q, { alResponder: (ok) => { hechas++; bien += ok; contar(); progreso.responder(almacen, q.id, ok); } })))
       : [h('p', { class: 'vacio' }, falladas ? 'No tenés preguntas falladas. Hacé un simulacro de parcial para sumar práctica.' : 'Todavía no hay preguntas cargadas.')]));
   }

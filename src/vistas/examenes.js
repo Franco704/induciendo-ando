@@ -30,10 +30,12 @@ export function itemExamen(it, { abierto = false } = {}) {
     it.lab && h('a', { class: 'enlace-lab', href: `#/simulador/${it.lab}` }, 'Verlo en el simulador'));
 }
 
+const aviso = (e) => e.regional && h('aside', { class: 'nota' }, h('p', {}, h('strong', {}, 'Aviso: '), `este examen es de la regional ${e.regional}, no de la UTN-FRT. Sirve para practicar, pero el formato y el recorte de temas pueden no coincidir con los de Tucumán.`));
+
 const lista = (examenes) => h('ul', { class: 'lista-finales' }, examenes.map((e) =>
   h('li', {}, h('a', { class: 'lista-finales__item', href: `#/examen/${e.id}` },
     h('span', { class: 'lista-finales__fecha' }, e.tipo === 'final' ? e.fecha : e.nombre),
-    h('span', { class: 'lista-finales__temas' }, temas(e))))));
+    h('span', { class: 'lista-finales__temas' }, temas(e) + (e.regional ? ` · regional ${e.regional}` : '')))))));
 
 const temas = (e) => {
   const tps = [...new Set(e.items.map((i) => moduloPorId(i.tema)?.tp))].sort((a, b) => a - b);
@@ -46,7 +48,7 @@ export function vistaExamenes(raiz, { consulta }) {
   raiz.append(h('div', { class: 'pagina' },
     h('header', { class: 'pagina__cabecera' },
       h('h1', { class: 'pagina__titulo' }, 'Exámenes resueltos'),
-      h('div', { class: 'prosa pagina__bajada' }, texto(`Finales desde 2010 y parciales desde 2018, transcriptos de las fotos y resueltos paso a paso. El final actual tiene **tres bloques** (electricidad, termodinámica y electromagnetismo) y cada uno pide un tema de **teoría** desarrollado y una **aplicación** numérica. Antes se tomaba un cuestionario de opción múltiple que restaba por error.`))),
+      h('div', { class: 'prosa pagina__bajada' }, texto(`Finales desde 2010 y parciales desde 2018, transcriptos de las fotos y resueltos paso a paso. El final actual tiene **tres bloques** (electricidad, termodinámica y electromagnetismo) y cada uno pide un tema de **teoría** desarrollado y una **aplicación** numérica. Antes se tomaba un cuestionario de opción múltiple que restaba por error. Al final de la lista hay un modelo de final de la **regional Buenos Aires** (UTN-FRBA), marcado como tal.`))),
     h('section', { class: 'bloque', id: 'finales' },
       h('h2', { class: 'bloque__titulo' }, 'Finales'),
       lista(grupo('final'))),
@@ -69,6 +71,7 @@ export function vistaExamen(raiz, { id, consulta }) {
   raiz.append(h('div', { class: 'pagina', dataset: { parcial: e.tipo === 'final' ? 3 : e.parcial } },
     h('p', { class: 'modulo__contexto' }, h('a', { href: '#/examenes' }, 'Exámenes resueltos')),
     h('h1', { class: 'pagina__titulo' }, e.nombre),
+    aviso(e),
     e.nota && h('p', { class: 'pagina__bajada' }, e.nota),
     e.items.map((it) => itemExamen(it, { abierto: consulta.get('i') === it.n }))));
   const i = consulta.get('i');
