@@ -1,0 +1,127 @@
+import { h, svg, ICONOS } from '../ui/atomos/h.js';
+import { texto, enLinea } from '../ui/atomos/matematica.js';
+import { boton } from '../ui/atomos/controles.js';
+import { bloqueTeoria, ejercicio, pregunta } from '../ui/moleculas/moleculas.js';
+import { reproductor } from '../ui/moleculas/video.js';
+import { marcoSimulador } from '../ui/organismos/simulador.js';
+import { cargarModulo, MODULOS, UNIDADES, PARCIALES } from '../temario/indice.js';
+import { cargarSimulador } from '../simuladores/indice.js';
+import { itemsDeModulo } from '../examenes/examenes.js';
+import { videosDeModulo } from '../estudio/videos.js';
+import { progreso } from '../nucleo/almacen.js';
+
+export function vistaModulo(raiz, { id }, { almacen }) {
+  const sims = [];
+  let vivo = true, observador = null;
+  raiz.append(h('p', { class: 'cargando' }, 'Cargando el módulo…'));
+
+  cargarModulo(id).then(async (mod) => {
+    if (!vivo) return;
+    if (!mod) { raiz.replaceChildren(h('p', { class: 'vacio' }, 'Ese módulo no existe. Elegí uno del índice.')); return; }
+    document.title = `TP ${mod.tp}: ${mod.titulo} · Induciendo Ando`;
+    const parcial = PARCIALES[mod.parcial - 1];
+    const enExamenes = itemsDeModulo(id);
+    const videos = videosDeModulo(id);
+    const secciones = [
+      ['teoria', 'Teoría', mod.teoria?.length],
+      ['simulador', mod.labs.length > 1 ? 'Simuladores' : 'Simulador', mod.labs.length],
+      ['video', 'Video', videos.length],
+      ['ejercicios', 'Ejercicios resueltos', mod.ejercicios?.length],
+      ['autoevaluacion', 'Autoevaluación', mod.preguntas?.length],
+      ['examenes', 'En los exámenes', enExamenes.length],
+    ].filter(([, , n]) => n);
+
+    const i = MODULOS.findIndex((x) => x.id === id);
+    const ant = MODULOS[i - 1], sig = MODULOS[i + 1];
+    const leido = () => !!almacen.leer().leidos[id];
+    const marcar = boton(leido() ? 'Estudiado' : 'Marcar como estudiado', () => {
+      progreso.marcarLeido(almacen, id);
+      marcar.querySelector('span').textContent = 'Estudiado';
+      marcar.disabled = true;
+    }, { variante: leido() ? 'secundario' : 'primario', icono: 'ok', disabled: leido() });
+
+    const pagina = h('article', { class: 'modulo', dataset: { parcial: mod.parcial } },
+      h('header', { class: 'modulo__cabecera' },
+        h('p', { class: 'modulo__contexto' },
+          h('a', { href: '#/' }, `${parcial.titulo}: ${parcial.tema.toLowerCase()}`), ' / ', UNIDADES[mod.unidad]),
+        h('div', { class: 'modulo__rotulo' },
+          h('span', { class: 'modulo__tp', 'aria-hidden': 'true' }, String(mod.tp).padStart(2, '0')),
+          h('div', {},
+            h('p', { class: 'modulo__tp-texto' }, `Trabajo práctico ${mod.tp}`),
+            h('h1', { class: 'modulo__titulo' }, mod.titulo))),
+        mod.intro && h('div', { class: 'prosa modulo__intro' }, texto(mod.intro)),
+        h('nav', { class: 'modulo__indice', 'aria-label': 'Secciones del módulo' },
+          secciones.map(([sid, nombre]) => h('a', { href: `#/modulo/${id}?s=${sid}`, onclick: (e) => { e.preventDefault(); irA(sid); } }, nombre)))),
+
+      mod.teoria?.length && h('section', { class: 'modulo__seccion', id: 'teoria' },
+        h('h2', { class: 'modulo__h2' }, 'Teoría'),
+        mod.teoria.map(bloqueTeoria)),
+
+      mod.labs.length && h('section', { class: 'modulo__seccion modulo__seccion--ancha', id: 'simulador' },
+        h('h2', { class: 'modulo__h2' }, mod.labs.length > 1 ? 'Simuladores' : 'Simulador'),
+        h('div', { class: 'modulo__labs' })),
+
+      videos.length && h('section', { class: 'modulo__seccion', id: 'video' },
+        h('h2', { class: 'modulo__h2' }, 'Video'),
+        videos.map((v) => reproductor(v))),
+
+      mod.ejercicios?.length && h('section', { class: 'modulo__seccion', id: 'ejercicios' },
+        h('h2', { class: 'modulo__h2' }, 'Ejercicios resueltos'),
+        h('p', { class: 'modulo__ayuda' }, 'Intentá cada uno en papel antes de abrir los pasos. Los pasos se revelan de a uno.'),
+        mod.ejercicios.map((e, k) => ejercicio(e, k))),
+
+      mod.preguntas?.length && h('section', { class: 'modulo__seccion', id: 'autoevaluacion' },
+        h('h2', { class: 'modulo__h2' }, 'Autoevaluación'),
+        mod.preguntas.map((q) => pregunta(q, {
+          previa: almacen.leer().respuestas[q.id],
+          alResponder: (ok) => progreso.responder(almacen, q.id, ok),
+        }))),
+
+      enExamenes.length && h('section', { class: 'modulo__seccion', id: 'examenes' },
+        h('h2', { class: 'modulo__h2' }, 'Cómo lo toman en los exámenes'),
+        h('ul', { class: 'en-finales' }, enExamenes.map((it) =>
+          h('li', {}, h('a', { href: `#/examen/${it.examen.id}?i=${it.n}` },
+            h('span', { class: 'en-finales__fecha' }, `${it.examen.nombre}, ${it.n}`),
+            h('span', { class: 'en-finales__enunciado' }, enLinea(recortar(it.enunciado)))))))),
+
+      h('footer', { class: 'modulo__pie' },
+        marcar,
+        h('div', { class: 'modulo__vecinos' },
+          ant && h('a', { class: 'vecino', href: `#/modulo/${ant.id}` }, svg(ICONOS.atras, { tam: 18 }), h('span', {}, h('small', {}, `TP ${ant.tp}`), ant.titulo)),
+          sig && h('a', { class: 'vecino vecino--sig', href: `#/modulo/${sig.id}` }, h('span', {}, h('small', {}, `TP ${sig.tp}`), sig.titulo), svg(ICONOS.adelante, { tam: 18 })))));
+
+    raiz.replaceChildren(pagina);
+    const destino = pagina.querySelector('.modulo__labs');
+    for (const simId of mod.labs) {
+      const sim = await cargarSimulador(simId);
+      if (!vivo || !sim) continue;
+      const el = marcoSimulador(sim);
+      sims.push(el);
+      destino.append(el);
+    }
+    const s = new URLSearchParams(location.hash.split('?')[1]).get('s');
+    if (s) irA(s);
+    // Riel (desde 1280 px el índice de secciones queda fijo a la derecha): marca la sección que se está leyendo
+    const enlaces = new Map([...pagina.querySelectorAll('.modulo__indice a')].map((a) => [new URLSearchParams(a.getAttribute('href').split('?')[1]).get('s'), a]));
+    observador = new IntersectionObserver((entradas) => entradas.forEach((en) => {
+      if (!en.isIntersecting) return;
+      enlaces.forEach((a) => a.removeAttribute('aria-current'));
+      enlaces.get(en.target.id)?.setAttribute('aria-current', 'true');
+    }), { rootMargin: '0px 0px -70% 0px' });
+    pagina.querySelectorAll('.modulo__seccion').forEach((sec) => observador.observe(sec));
+  });
+
+  function irA(sid) {
+    document.getElementById(sid)?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }
+
+  return () => { vivo = false; observador?.disconnect(); sims.forEach((l) => l.destruir()); };
+}
+
+// Corta el enunciado sin dejar una fórmula abierta.
+function recortar(s) {
+  if (s.length <= 160) return s;
+  let c = s.slice(0, s.lastIndexOf(' ', 150));
+  if ((c.match(/\$/g) || []).length % 2) c = c.slice(0, c.lastIndexOf('$'));
+  return c.trimEnd() + '…';
+}

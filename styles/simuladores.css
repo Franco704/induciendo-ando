@@ -1,0 +1,33 @@
+/* Piezas propias de Física II: lecturas de los simuladores, video, agradecimiento. */
+
+/* La portada es el único lugar con trazo grueso de marca: el título se apoya en una línea de campo */
+.portada__titulo { font-weight: 850; letter-spacing: -0.04em; }
+.portada__escena { border-block: 1px solid var(--linea); background: var(--papel); }
+@media (min-width: 768px) { .portada__escena { border: 1px solid var(--linea); border-radius: var(--r-medio); } }
+
+/* Lecturas numéricas de los simuladores: cifras tabulares, nunca monoespaciadas */
+.dato { display: flex; justify-content: space-between; gap: var(--e-3); padding: 6px 0; border-bottom: 1px solid var(--linea); }
+.dato:last-child { border-bottom: 0; }
+.dato__etiqueta { color: var(--tinta-suave); }
+.dato__valor { font-weight: 650; font-variant-numeric: tabular-nums; text-align: right; }
+.dato--destacado .dato__valor { color: var(--eje); }
+.sim__leyenda { display: flex; flex-wrap: wrap; gap: var(--e-2) var(--e-4); font-size: 0.8125rem; color: var(--tinta-suave); }
+.sim__leyenda span { display: inline-flex; align-items: center; gap: 6px; }
+.sim__leyenda i { width: 14px; height: 3px; border-radius: 2px; background: currentColor; display: inline-block; }
+.lab__vista > .lienzo.lienzo--bajo { aspect-ratio: 16 / 7; }
+.lab__vista > .lienzo.lienzo--medio { aspect-ratio: 16 / 10; }
+
+/* Video */
+.video { margin: var(--e-4) 0 0; display: grid; gap: var(--e-2); max-width: 880px; }
+.video__medio { width: 100%; aspect-ratio: 16 / 9; background: var(--papel-2); border-radius: var(--r-medio); border: 1px solid var(--linea); }
+.video__pie { display: grid; gap: 2px; font-size: var(--t--1); color: var(--tinta-suave); }
+.video__pie strong { color: var(--tinta); font-size: var(--t-0); }
+.videos { display: grid; gap: var(--e-7); margin-top: var(--e-6); }
+.videos__modulo { font-weight: 650; color: var(--eje); text-decoration: none; font-size: var(--t--1); }
+.videos__modulo:hover { text-decoration: underline; }
+
+/* Agradecimiento: una sola nota sobria, con la regla de color del primer parcial */
+.gracias { margin-top: var(--e-8); padding: var(--e-5) 0 var(--e-5) var(--e-5); border-left: 3px solid var(--elec); max-width: var(--medida); }
+.gracias__titulo { font-size: var(--t-2); font-weight: 800; letter-spacing: -0.02em; }
+.gracias__texto { margin-top: var(--e-3); font-family: var(--f-texto); font-size: calc(var(--t-0) * 1.04); line-height: 1.65; }
+.gracias__texto strong { font-weight: 650; }

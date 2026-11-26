@@ -1,0 +1,114 @@
+/* Banco de pruebas: vidrio de laboratorio frío y tinta grafito. Cian = electricidad (1.er parcial),
+   índigo = magnetismo, ondas y calor (2.º parcial), ocre = final. Rojo y azul solo para el signo de la carga
+   (y para caliente/frío) dentro de los simuladores, como en los libros. Ningún otro color decora.
+   Schibsted Grotesk para títulos e interfaz, Source Serif 4 para la teoría; las fórmulas, en KaTeX. */
+:root {
+  --papel: #eef2f1;
+  --papel-2: #e1e8e6;
+  --superficie: #ffffff;
+  --tinta: #17211f;
+  --tinta-suave: #4f5f5b;
+  --cuadricula: #d2dcd9;
+  --linea: #c0ccc8;
+  --elec: #0a6f86;
+  --elec-tenue: #dcf0f3;
+  --mag: #4b3bb8;
+  --mag-tenue: #e8e5fa;
+  --ok: #24734a;
+  --ok-tenue: #e1f1e7;
+  --error: #b42318;
+  --error-tenue: #fbe6e3;
+  --acento3: #9a6a12;
+  --mas: #c8352e;
+  --menos: #2b62d1;
+  --calor: #c8352e;
+  --frio: #2b62d1;
+  --eje: var(--elec);
+  --eje-tenue: var(--elec-tenue);
+
+  --f-ui: 'Schibsted Grotesk', system-ui, sans-serif;
+  --f-texto: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
+
+  /* Escala tipográfica modular 1.2 sobre 17px */
+  --t--1: 0.875rem;
+  --t-0: 1.0625rem;
+  --t-1: 1.275rem;
+  --t-2: 1.53rem;
+  --t-3: 1.836rem;
+  --t-4: 2.2rem;
+  --t-5: clamp(2.4rem, 7vw, 4.4rem);
+
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+  --e-8: 4.5rem;
+
+  --r-chico: 6px;
+  --r-medio: 12px;
+  --medida: 68ch;
+  --gutter: 16px;
+  --barra: 56px;
+  --dock: 64px;
+  --lateral: 300px;
+  color-scheme: light;
+}
+
+[data-parcial='2'], .eje-mag { --eje: var(--mag); --eje-tenue: var(--mag-tenue); }
+[data-parcial='3'], .eje-final { --eje: var(--acento3); --eje-tenue: color-mix(in srgb, var(--acento3) 14%, var(--papel)); }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --papel: #0d1514;
+    --papel-2: #132020;
+    --superficie: #172625;
+    --tinta: #e2ece9;
+    --tinta-suave: #97aba6;
+    --cuadricula: #1d2d2b;
+    --linea: #2a3d3a;
+    --elec: #5ccbe0;
+    --elec-tenue: #0f3139;
+    --mag: #a99cff;
+    --mag-tenue: #26214a;
+    --ok: #6fcf97;
+    --ok-tenue: #163626;
+    --error: #ff8a7a;
+    --error-tenue: #3d1a17;
+    --acento3: #e2b45a;
+    --mas: #ff7a6e;
+    --menos: #78a6ff;
+    --calor: #ff7a6e;
+    --frio: #78a6ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --papel: #0d1514;
+  --papel-2: #132020;
+  --superficie: #172625;
+  --tinta: #e2ece9;
+  --tinta-suave: #97aba6;
+  --cuadricula: #1d2d2b;
+  --linea: #2a3d3a;
+  --elec: #5ccbe0;
+  --elec-tenue: #0f3139;
+  --mag: #a99cff;
+  --mag-tenue: #26214a;
+  --ok: #6fcf97;
+  --ok-tenue: #163626;
+  --error: #ff8a7a;
+  --error-tenue: #3d1a17;
+  --acento3: #e2b45a;
+  --mas: #ff7a6e;
+  --menos: #78a6ff;
+  --calor: #ff7a6e;
+  --frio: #78a6ff;
+  color-scheme: dark;
+}
+
+@media (min-width: 768px) {
+  :root { --gutter: 32px; --t-0: 1.125rem; }
+}
